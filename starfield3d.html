@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3d starfield</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      const context = canvas.getContext("2d");
+
+      const backgroundColor = "black";
+      const starColor = "white";
+
+      const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      context.fillStyle = backgroundColor;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      const size = 500;
+      const starX = [];
+      const starY = [];
+      const starDX = [];
+      const starDY = [];
+
+      const mX = canvas.width / 2;
+      const mY = canvas.height / 2;
+
+      for (let i = 0; i < size; i++) {
+        starDX[i] = Math.random() * 6 - 3;
+        starDY[i] = Math.random() * 6 - 3;
+        const step = Math.random() * (mY / 2);
+        starX[i] = mX + starDX[i] * step;
+        starY[i] = mY + starDY[i] * step;
+      }
+
+      const loop = () => {
+        context.fillStyle = backgroundColor;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < size; i++) {
+          context.fillStyle = backgroundColor;
+          context.fillRect(starX[i], starY[i], 2, 2);
+
+          starX[i] += starDX[i];
+          starY[i] += starDY[i];
+
+          context.fillStyle = starColor;
+          context.fillRect(starX[i], starY[i], 2, 2);
+
+          if (starX[i] <= 0 || starX[i] >= canvas.width || starY[i] <= 0 || starY[i] >= canvas.width) {
+            starX[i] = mX;
+            starY[i] = mY;
+          }
+        }
+        requestAnimationFrame(loop);
+      };
+      loop();
+    </script>
+  </body>
+</html>

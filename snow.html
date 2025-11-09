@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snow</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      const context = canvas.getContext("2d");
+
+      const backgroundColor = "black";
+      const snowColor = "white";
+
+      const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      context.fillStyle = backgroundColor;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      const size = 500;
+      const snowX = [];
+      const snowY = [];
+      const snowDY = [];
+
+      for (let i = 0; i < size; i++) {
+        snowX[i] = Number.parseInt(Math.random() * canvas.width, 10);
+        snowY[i] = Number.parseInt(Math.random() * canvas.height, 10);
+        snowDY[i] = Math.random() * 1 + 1;
+      }
+
+      const loop = () => {
+        context.fillStyle = backgroundColor;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < size; i++) {
+          context.fillStyle = backgroundColor;
+          context.fillRect(snowX[i], snowY[i], 2, 2);
+
+          snowX[i] += Math.random() * 2 - 1;
+          snowY[i] += snowDY[i];
+
+          context.fillStyle = snowColor;
+          context.fillRect(snowX[i], snowY[i], 2, 2);
+
+          if (snowY[i] >= canvas.height) snowY[i] = 0;
+        }
+        requestAnimationFrame(loop);
+      };
+      loop();
+    </script>
+  </body>
+</html>
